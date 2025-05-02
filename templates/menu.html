@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <link rel="stylesheet" href="/static/menu_styles.css">
+</head>
+
+<script>
+    async function showMenu(meal) {
+    try{
+        const res = await fetch(`/api/menu/${meal}`);
+                if (!res.ok) throw new Error('Network response was not ok');
+                const items = await res.json();
+                document.getElementById('menu-title').innerText = meal.charAt(0).toUpperCase() + meal.slice(1);
+                const container = document.getElementById('menu-items');
+                container.innerHTML = '';
+                items.forEach(item => {
+                    container.innerHTML += `
+                        <div class="menu-card">
+                            <img src="${item.image_url}" alt="${item.name}">
+                            <p>${item.name}</p>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error('Menu fetch failed:', error);
+            }
+    }
+</script>
+
+<body>
+    <section class="menu-header">
+        <h1>Our Menu</h1>
+        <nav onclick="showMenu('breakfast')">Breakfast</nav>
+        <nav onclick="showMenu('lunch')">Lunch</nav>
+        <nav onclick="showMenu('dinner')">Dinner</nav>
+    </section>
+    <section id="menu-display">
+        <h2 id="menu-title">Select a meal</h2>
+        <div id="menu-items" class="menu-grid"></div>
+    </section>
+    
+</body>
+</html>

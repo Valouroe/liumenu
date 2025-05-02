@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIU Eats Menu</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <section>
+        <h1>LIU Eats</h1>
+        <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092" alt="Delicious food banner" style="width:100%; max-height:300px; object-fit:cover;">
+        <nav><a href="#about">About Us</a></nav>
+        <nav><a href="#reviews">Reviews</a></nav>
+        <nav><a href="/menu">Menu</a></nav>
+    </section>
+
+    <section id="about">
+        <h2>About Us</h2>
+        <p>Welcome to <strong>LIU Eats</strong> — the heart and soul of dining at LIU Brooklyn. For over a decade, we've been committed to fueling our students, athletes, and faculty with meals that are not only delicious but also thoughtfully prepared. Our world-class chefs — including veterans of <em>Hell’s Kitchen</em> and acclaimed culinary schools — craft dishes with global flair and local freshness.</p>
+        <p>We believe food should inspire. Whether you're grabbing breakfast before class or unwinding with dinner after practice, we bring restaurant-quality meals to your campus experience.</p>
+    </section>
+
+    <section id="reviews">
+        <h2>Reviews</h2>
+        {% for review in reviews %}
+        <blockquote>"{{ review.text }}" – {{ review.user }}</blockquote>
+        {% endfor %}
+    </section>
+    
+    <form method="POST" action="/submit-review">
+        <input type="text" name="name" placeholder="Your name..." required>
+        <textarea name="review" placeholder="Write your review..." required></textarea>
+        <button type="submit">Submit Review</button>
+    </form>
+    
+
+</body>
+</html>

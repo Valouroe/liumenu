@@ -25,12 +25,36 @@
         <h2>Reviews</h2>
         <div id="reviews-container">Loading...</div>
     </section>
-    
-    <form method="POST" action="https://cafemenu-worker.dev/submit-review">
+
+
+
+    <form id="review-form">
         <input type="text" name="name" placeholder="Your name..." required>
         <textarea name="review" placeholder="Write your review..." required></textarea>
         <button type="submit">Submit Review</button>
-    </form>
+      </form>
+      
+      <script>
+        document.getElementById("review-form").addEventListener("submit", async (e) => {
+          e.preventDefault();
+      
+          const form = e.target;
+          const formData = new FormData(form);
+      
+          const response = await fetch("https://cafemenu-worker.dev/submit-review", {
+            method: "POST",
+            body: formData,
+          });
+      
+          if (response.ok) {
+            alert("Review submitted!");
+            form.reset();
+          } else {
+            alert("Failed to submit review.");
+          }
+        });
+      </script>
+    
 
 
     <script>

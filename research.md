@@ -1,0 +1,1 @@
+This webapp looks to solve the problem of lack of viewing the cafeteria menu and also leave reviews. Users have been provided with the opportunity to see the reviews of other people and add their own reviews. The food options for the day are displayed with their images and name.

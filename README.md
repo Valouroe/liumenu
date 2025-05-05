@@ -1,1 +1,1 @@
-# liumenu
+This webapp is simple to run. It requires your frontend (staic site) and the Worker handles the API calls and reviews. The actual Worker being used is called cafemenu-worker which is in a differentt git repo. I can't delete the website-worker because of some issues that my computer is having. 

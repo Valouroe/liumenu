@@ -37,6 +37,12 @@ async function addReview(env, data) {
     await env.REVIEWS.put(id, JSON.stringify(review));
 }
 
+function withCors(response) {
+	response.headers.set("Access-Control-Allow-Origin", "*");
+	response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+	response.headers.set("Access-Control-Allow-Headers", "Content-Type");
+	return response;
+  }
 export default{
 async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -72,29 +78,31 @@ async fetch(request, env, ctx) {
 
     
     if (pathname === "/reviews" && method === "GET") {
-      const reviews = await getRecentReviews(env);
-      return new Response(JSON.stringify(reviews), {
-        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
-      });
+		const reviews = await getRecentReviews(env);
+		const res = new Response(JSON.stringify(reviews), {
+		  headers: { "Content-Type": "application/json" }
+		});
+		return withCors(res);
     }
 
    
     if (pathname === "/submit-review" && method === "POST") {
-      const formData = await request.formData();
-      const name = formData.get("name") || "Anonymous";
-      const review = formData.get("review") || "";
-      await addReview(env, { name, review });
-      return new Response("Review submitted", { status: 200 });
+		const formData = await request.formData();
+		const name = formData.get("name") || "Anonymous";
+		const review = formData.get("review") || "";
+		await addReview(env, { name, review });
+		return withCors(new Response("Review submitted", { status: 200 }));
     }
 
-    return new Response("Not found", { status: 404 });
+	return withCors(new Response("Not found", { status: 404 }));
   }
 };
 
 
 
 
-
+  
+  
 
 
 

@@ -23,16 +23,27 @@
 
     <section id="reviews">
         <h2>Reviews</h2>
-        {% for review in reviews %}
-        <blockquote>"{{ review.text }}" – {{ review.user }}</blockquote>
-        {% endfor %}
+        <div id="reviews-container">Loading...</div>
     </section>
     
-    <form method="POST" action="/submit-review">
+    <form method="POST" action="https://cafemenu-worker.dev/submit-review">
         <input type="text" name="name" placeholder="Your name..." required>
         <textarea name="review" placeholder="Write your review..." required></textarea>
         <button type="submit">Submit Review</button>
     </form>
+
+
+    <script>
+        fetch("https://cafemenu.worker.dev/reviews")
+          .then(res => res.json())
+          .then(data => {
+            const container = document.getElementById('reviews-container');
+            container.innerHTML = "";
+            data.forEach(r => {
+              container.innerHTML += `<blockquote>"${r.text}" – ${r.user}</blockquote>`;
+            });
+          });
+        </script>
     
 
 </body>

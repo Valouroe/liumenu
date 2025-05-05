@@ -33,8 +33,46 @@
         <textarea name="review" placeholder="Write your review..." required></textarea>
         <button type="submit">Submit Review</button>
       </form>
-      
+
+
+
       <script>
+        async function loadReviews() {
+          const res = await fetch("https://cafemenu-worker.valour-okeyewurum.workers.dev/reviews");
+          const data = await res.json();
+          const container = document.getElementById('reviews-container');
+          container.innerHTML = "";
+          data.forEach(r => {
+            if (r && r.text && r.user) {
+              container.innerHTML += `<blockquote>"${r.text}" – ${r.user}</blockquote>`;
+            }
+          });
+        }
+      
+        document.getElementById("review-form").addEventListener("submit", async (e) => {
+          e.preventDefault();
+      
+          const form = e.target;
+          const formData = new FormData(form);
+      
+          const response = await fetch("https://cafemenu-worker.valour-okeyewurum.workers.dev/submit-review", {
+            method: "POST",
+            body: formData,
+          });
+      
+          if (response.ok) {
+            alert("Review submitted!");
+            form.reset();
+            await loadReviews(); // 🔄 Fetch new reviews
+          } else {
+            alert("Failed to submit review.");
+          }
+        });
+      
+        window.onload = loadReviews; // 🔃 Initial load
+      </script>
+      
+      <!-- <script>
         document.getElementById("review-form").addEventListener("submit", async (e) => {
           e.preventDefault();
       
@@ -67,7 +105,7 @@
               container.innerHTML += `<blockquote>"${r.text}" – ${r.user}</blockquote>`;
             });
           });
-        </script>
+        </script> -->
     
 
 </body>

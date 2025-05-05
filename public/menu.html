@@ -11,7 +11,7 @@
     async function showMenu(meal) {
     try{
        
-                const res = await fetch(`https://cafemenu-worker.valour-okeyewurum.workers.dev/api/menu${meal}`);
+                const res = await fetch(`https://cafemenu-worker.valour-okeyewurum.workers.dev/api/menu/${meal}`);
                 if (!res.ok) throw new Error('Network response was not ok');
                 const items = await res.json();
                 document.getElementById('menu-title').innerText = meal.charAt(0).toUpperCase() + meal.slice(1);

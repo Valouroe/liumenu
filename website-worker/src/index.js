@@ -7,12 +7,17 @@
  *
  * Learn more at https://developers.cloudflare.com/workers/
  */
+// console.log("KV keys:", list.keys); // ✅ Move this up
+
+//     const keys = list.keys
+//         .filter(k => k.metadata && k.metadata.timestamp)
 
 async function getRecentReviews(env) {
     const list = await env.REVIEWS.list();
+	console.log("KV keys:", list.keys);
     const keys = list.keys.sort((a, b) => b.metadata.timestamp - a.metadata.timestamp).slice(0, 5);
     const reviews = [];
-	console.log("KV keys:", list.keys);
+	
     for (const key of keys) {
         const review = await env.REVIEWS.get(key.name, { type: "json" });
         if (review) reviews.push(review);
@@ -22,12 +27,12 @@ async function getRecentReviews(env) {
 
 async function addReview(env, data) {
     const id = `review-${Date.now()}`;
-	console.log("Saving review:", review);
     const review = {
         user: data.name || "Anonymous",
         text: data.review || "",
         timestamp: Date.now()
     };
+	console.log("Saving review:", review);
     await env.REVIEWS.put(id, JSON.stringify(review), { metadata: { timestamp: review.timestamp } });
 }
 

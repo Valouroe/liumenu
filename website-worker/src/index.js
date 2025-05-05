@@ -14,11 +14,12 @@
 
 async function getRecentReviews(env) {
     const list = await env.REVIEWS.list();
-	console.log("KV keys:", list.keys);
-    const keys = list.keys.sort((a, b) => b.metadata.timestamp - a.metadata.timestamp).slice(0, 5);
+    const keys = list.keys
+        .sort((a, b) => b.name.localeCompare(a.name)) // Sort by timestamp in key name
+        .slice(-5); // Get last 5
+
     const reviews = [];
-	
-    for (const key of keys) {
+    for (const key of keys.reverse()) {
         const review = await env.REVIEWS.get(key.name, { type: "json" });
         if (review) reviews.push(review);
     }
@@ -26,14 +27,14 @@ async function getRecentReviews(env) {
 }
 
 async function addReview(env, data) {
-    const id = `review-${Date.now()}`;
+    const timestamp = Date.now();
+    const id = `review-${timestamp}`;
     const review = {
         user: data.name || "Anonymous",
         text: data.review || "",
-        timestamp: Date.now()
+        timestamp
     };
-	console.log("Saving review:", review);
-    await env.REVIEWS.put(id, JSON.stringify(review), { metadata: { timestamp: review.timestamp } });
+    await env.REVIEWS.put(id, JSON.stringify(review));
 }
 
 export default{
